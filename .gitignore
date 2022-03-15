@@ -1,0 +1,7 @@
+
+.packages
+.dart_tool
+pubspec.lock
+.idea
+build
+.gradle
