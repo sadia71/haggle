@@ -5,3 +5,10 @@ pubspec.lock
 .idea
 build
 .gradle
+.flutter-plugins
+
+.flutter-plugins-dependencies
+
+android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+
+ios/Runner/GeneratedPluginRegistrant.m

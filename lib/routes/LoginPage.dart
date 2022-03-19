@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -8,6 +12,41 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  var isSignInLoading = false;
+
+  _signInWithGoogle() async {
+    setState(() {
+      isSignInLoading = true;
+    });
+    final GoogleSignInAccount?  googleUser = await GoogleSignIn().signIn();
+    if(googleUser != null ){
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      var isSignIn =  await FirebaseAuth.instance.signInWithCredential(credential);
+
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if(user != null){
+        // if(isSignIn.additionalUserInfo?.isNewUser == true ) UserManagement().storeNewUser(user);
+
+        Navigator.of(context).pop();
+        Navigator.of(context).pushNamed('/homePage');
+
+        // FlutterToast().successToast('Logged in as','DEFAULT', 14.0, user.email);
+      }
+    } else {
+      setState(() {
+      isSignInLoading = false;
+    });
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,12 +110,12 @@ class _LoginPageState extends State<LoginPage> {
       ),
 
       floatingActionButton: FloatingActionButton.extended(onPressed: () async {
-        // try{
-        //   await _signInWithGoogle();
-        //
-        // } catch (e){
-        //   print(e);
-        // }
+        try{
+          await _signInWithGoogle();
+
+        } catch (e){
+          print(e);
+        }
       },
           label: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
