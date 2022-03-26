@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:haggle/firebase/UserManagement.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -31,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       User? user = FirebaseAuth.instance.currentUser;
 
       if(user != null){
-        // if(isSignIn.additionalUserInfo?.isNewUser == true ) UserManagement().storeNewUser(user);
+        if(isSignIn.additionalUserInfo?.isNewUser == true ) UserManagement().storeNewUser(user);
 
         Navigator.of(context).pop();
         Navigator.of(context).pushNamed('/homePage');
