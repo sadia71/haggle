@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haggle/modals/AddItemModal.dart';
 import 'package:haggle/routes/AuctionAds.dart';
 import 'package:haggle/routes/MyGranary.dart';
 class HomePage extends StatefulWidget {
@@ -32,13 +33,13 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton.small(
         onPressed: () {
-          // Add your onPressed code here!
-          // Navigator.of(context).push(new MaterialPageRoute<Null>(
-          //     builder: (BuildContext context) {
-          //       return new AddItemModal();
-          //     },
-          //     fullscreenDialog: true
-          // ));
+          //Add your onPressed code here!
+          Navigator.of(context).push( MaterialPageRoute<void>(
+              builder: (BuildContext context) {
+                return const AddItemModal();
+              },
+              fullscreenDialog: true
+          ));
         },
         child: const Icon(Icons.add),
         backgroundColor: Colors.blue,
