@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   int selectedPage = 0;
 
   final _pageOptions = [
-    const AuctionAds(),
+     const AuctionAds(),
     const MyGranary()
   ];
 
