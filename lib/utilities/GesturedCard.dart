@@ -8,8 +8,8 @@ import 'package:haggle/routes/BidsItemDetails.dart';
 import 'package:haggle/utilities/Carousel.dart';
 import 'AuctionTime.dart';
 class GesturedCard extends StatefulWidget {
-  final item;
-  const GesturedCard({Key? key, @required this.item}) : super(key: key);
+  final List items;
+  const GesturedCard({Key? key, required this.items}) : super(key: key);
 
   @override
   _GesturedCardState createState() => _GesturedCardState();
@@ -18,7 +18,7 @@ class GesturedCard extends StatefulWidget {
 class _GesturedCardState extends State<GesturedCard> {
   @override
   Widget build(BuildContext context) {
-    var item = widget.item;
+    var item = widget.items;
     User? currentUser = FirebaseAuth.instance.currentUser;
 
 
@@ -26,11 +26,12 @@ class _GesturedCardState extends State<GesturedCard> {
         itemCount: item.length,
         key: UniqueKey(),
         itemBuilder: (context, index) {
-          var itemData = item[index].data();
+          var itemData = item[index];
+
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-                  BidsItemDetails(itemDetails: item[index])));
+                 BidsItemDetails(itemDetails: itemData,)));
             },
             child : Card(
               clipBehavior: Clip.antiAlias,
@@ -41,15 +42,15 @@ class _GesturedCardState extends State<GesturedCard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          UserManagement().getPostedUser(itemData['userId'], 'MODERATE_NAME', 10.0, 14.0, false, false, true),
-                          Text(AuctionTime().getPostedDay(itemData['bidAt']))
+                          UserManagement().getPostedUser(itemData.userId, 'MODERATE_NAME', 10.0, 14.0, false, false, true),
+                          Text(AuctionTime().getPostedDay(itemData.bidAt))
                         ],
                       )
 
                   ),
-                  Carousel().imageCarousel(itemData['itemImages'], 180.0),
+                  Carousel().imageCarousel(itemData.itemImages, 180.0),
                   Container(
-                    child: AuctionTime().getCountDown(itemData['lastBidTime'], itemData['itemId'], itemData['isCompleted']),
+                    child: AuctionTime().getCountDown(itemData.lastBidTime, itemData.itemId, itemData.isCompleted),
                   ),
 
                   Container(
@@ -59,7 +60,7 @@ class _GesturedCardState extends State<GesturedCard> {
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child:Text(itemData['itemName'], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                          child:Text(itemData.itemName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                           alignment: Alignment.topLeft,
                         ),
 
@@ -69,12 +70,12 @@ class _GesturedCardState extends State<GesturedCard> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Min Bid: ৳${itemData["minBidPrice"]}',
+                                  'Min Bid: ৳${itemData.minBidPrice}',
                                   style: TextStyle(color: Colors.black.withOpacity(0.6), fontWeight: FontWeight.bold),
                                 ),
 
                                 Text(
-                                  'last time : '+ AuctionTime().getTime(itemData['lastBidTime']),
+                                  'last time : '+ AuctionTime().getTime(itemData.lastBidTime),
                                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                                 ),
                               ],
@@ -92,7 +93,7 @@ class _GesturedCardState extends State<GesturedCard> {
                           padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
                           child: Row(
                             children: [
-                              Text(itemData.containsKey('bidUsers') && itemData['bidUsers'].length > 0 ? itemData['bidUsers'].length.toString() : '0'),
+                              Text(itemData.bidUsers.isNotEmpty ? itemData.bidUsers.length.toString() : '0'),
                               Icon(
                                 Icons.people,
                                 size: 15,
@@ -105,7 +106,7 @@ class _GesturedCardState extends State<GesturedCard> {
                           padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
                           child: Icon(
                             Icons.monetization_on,
-                            color: itemData.containsKey('bidUsers') && itemData['bidUsers'].length > 0 && itemData['bidUsers'].contains(currentUser!.uid)
+                            color: itemData.bidUsers.isNotEmpty && itemData.bidUsers.contains(currentUser!.uid)
                                 ? Colors.orange : Colors.grey.withOpacity(0.5),
                           )
                         ),

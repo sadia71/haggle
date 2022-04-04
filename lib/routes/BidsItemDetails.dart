@@ -21,7 +21,6 @@ class BidsItemDetails extends StatefulWidget {
 
 class _BidsItemDetailsState extends State<BidsItemDetails> {
 
-  var hasBid;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
         title: const Text('DETAILS'),
       ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            stream: FirebaseFirestore.instance.collection('items').doc(details['itemId']).snapshots(includeMetadataChanges: true),
+            stream: FirebaseFirestore.instance.collection('items').doc(details.itemId).snapshots(includeMetadataChanges: true),
             builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot){
 
               if (snapshot.hasData){
