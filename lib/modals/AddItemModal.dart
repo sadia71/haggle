@@ -48,7 +48,9 @@ class _AddItemModalState extends State<AddItemModal> {
     if(result != null ){
       List<File> filesPath = result.paths.map((path) => File(path!)).toList();
       setState(() => files =  filesPath);
-    } else return;
+    } else {
+      return;
+    }
 
   }
 
@@ -79,31 +81,17 @@ class _AddItemModalState extends State<AddItemModal> {
 
           }
 
-        } else return;
+        } else {
+          return;
+        }
 
       }).toList();
 
-    } else return;
+    } else {
+      return;
+    }
 
   }
-
-  //for further use
-
-  // Widget buildUploadStatus(UploadTask task){
-  //   return StreamBuilder<TaskSnapshot>(
-  //       stream: task.snapshotEvents,
-  //       builder: (context, snapshot){
-  //         if(snapshot.hasData){
-  //           final snap = snapshot.data!;
-  //           final progress =  snap.bytesTransferred/ snap.totalBytes;
-  //           final percentage = (progress * 100).toStringAsFixed(0);
-  //           return Text('$percentage%');
-  //
-  //         } else return Container();
-  //
-  //       });
-  //
-  // }
 
 
 
@@ -125,8 +113,11 @@ class _AddItemModalState extends State<AddItemModal> {
   Widget build(BuildContext context) {
 
     _checkIfFileMore(){
-      if(files != null) return files!.length <= 2;
-      else return true;
+      if(files != null) {
+        return files!.length <= 2;
+      } else {
+        return true;
+      }
 
     }
 
@@ -138,8 +129,6 @@ class _AddItemModalState extends State<AddItemModal> {
       var currentTime = ((DateTime.now().millisecondsSinceEpoch) / 1000)/60;
       var selectedTime = ((dateTime.millisecondsSinceEpoch)/ 1000)/60;
 
-      print('currentTime => $currentTime');
-      print('selectedTime => $selectedTime');
       return selectedTime - currentTime;
 
     }
@@ -151,7 +140,7 @@ class _AddItemModalState extends State<AddItemModal> {
         actions: <Widget>[
           Center(
               child: Container(
-                  margin: EdgeInsets.only(right: 15.0),
+                  margin: const EdgeInsets.only(right: 15.0),
                   child: Ink(
                       decoration: const ShapeDecoration(
                         color: Colors.white,
@@ -170,7 +159,7 @@ class _AddItemModalState extends State<AddItemModal> {
       ),
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             child:Column(
               children: [
 
@@ -180,11 +169,11 @@ class _AddItemModalState extends State<AddItemModal> {
                       options: CarouselOptions(height: 220.0, enableInfiniteScroll: true),
                       items: files!.map<Widget>((image) {
 
-                        return new Builder(
+                        return Builder(
                           builder: (BuildContext context) {
                             return Container(
                               width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.symmetric(horizontal: 5.0),
+                              margin: const EdgeInsets.symmetric(horizontal: 5.0),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   image: DecorationImage(
@@ -207,30 +196,30 @@ class _AddItemModalState extends State<AddItemModal> {
                                 color: Colors.black.withOpacity(0.3),
                                 spreadRadius: 1,
                                 blurRadius: 5,
-                                offset: Offset(0, 3)
+                                offset: const Offset(0, 3)
                             )
                           ]
                       ),
-                      child: Center(
+                      child: const Center(
                           child : Text('ADD AT LEAST 3 IMAGES', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)
                       ),
                     )
 
                 ),
-                SizedBox(height: 25.0),
+                const SizedBox(height: 25.0),
 
                 Container(
                   alignment: Alignment.topLeft,
-                  child: Text('ADD PRODUCT INFORMATION', textAlign: TextAlign.left, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  child: const Text('ADD PRODUCT INFORMATION', textAlign: TextAlign.left, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
 
                 TextFormField(
                   onChanged: (itemName) => {
                     setState(() => {
                       _itemName = itemName
                     })},
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Product Name',
                     // errorText: 'Error message',
                     border: OutlineInputBorder(),
@@ -239,7 +228,7 @@ class _AddItemModalState extends State<AddItemModal> {
                   ),
                 ),
 
-                SizedBox(height: 25,),
+                const SizedBox(height: 25,),
                 TextFormField(
                   keyboardType: TextInputType.multiline,
                   minLines: 1,//Normal textInputField will be displayed
@@ -248,7 +237,7 @@ class _AddItemModalState extends State<AddItemModal> {
                     setState(() => {
                       _itemDesc = descText
                     })},
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Product Description',
                     // errorText: 'Error message',
                     border: OutlineInputBorder(),
@@ -256,11 +245,11 @@ class _AddItemModalState extends State<AddItemModal> {
                     prefixIcon: Icon(Icons.description),
                   ),
                 ),
-                SizedBox(height: 25,),
+                const SizedBox(height: 25,),
 
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Minimum Bid Price',
                     // errorText: 'Error message',
                     border: OutlineInputBorder(),
@@ -272,10 +261,10 @@ class _AddItemModalState extends State<AddItemModal> {
                       _minBidPrice = minBidPrice
                     })},
                 ),
-                SizedBox(height: 60,),
+                const SizedBox(height: 60,),
 
                 ElevatedButton.icon(
-                  icon: Icon(Icons.event, color: Colors.white, size: 35.0),
+                  icon: const Icon(Icons.event, color: Colors.white, size: 35.0),
                   onPressed: () =>
                       CupertinoItems.
                       showSheet(context, child: buildDatePicker(),
@@ -285,26 +274,28 @@ class _AddItemModalState extends State<AddItemModal> {
                               setState(() {
                                 isLessTime = true;
                               });
-                            } else  setState(() {
+                            } else {
+                              setState(() {
                               isLessTime = false;
                             });
+                            }
                           }),
                   style: ElevatedButton.styleFrom(
-                      minimumSize: Size(88, 45)
+                      minimumSize: const Size(88, 45)
                   ),
 
-                  label: Text('SELECT AUCTION END DATE', style: TextStyle(fontSize: 20),),
+                  label: const Text('SELECT AUCTION END DATE', style: TextStyle(fontSize: 20),),
                 ),
 
 
                 if(isLessTime) Text(
                   'TIME SHOULD BE 10 MIN OR MORE FROM NOW', style: TextStyle(fontSize: 12, color: Colors.red[500]),
                 ),
-                SizedBox(height: 25),
+                const SizedBox(height: 25),
 
                 if (_checkIfTimeMoreThanTen() >= 10.0) Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.symmetric(horizontal:5.0, vertical: 5.0),
+                    padding: const EdgeInsets.symmetric(horizontal:5.0, vertical: 5.0),
 
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
@@ -313,23 +304,21 @@ class _AddItemModalState extends State<AddItemModal> {
                     child: Column(
                       children: [
                         Container(
-                            padding: EdgeInsets.symmetric(vertical: 10.0),
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Column(
                                 children:[
                                   Container(
                                     alignment: Alignment.topLeft,
-                                    padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-                                    child: Text('AUCTION WILL BE END', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color:  Colors.white)),
+                                    padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                                    child: const Text('AUCTION WILL BE END', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color:  Colors.white)),
                                   ),
                                   Container(
                                       alignment: Alignment.topRight,
-                                      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
                                       child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children:[
-
-                                            Container(
-                                              child: ElevatedButton.icon(
+                                            ElevatedButton.icon(
                                                 icon: Icon(Icons.add, color: disableSubmit() ? Colors.grey : Colors.white , size: 20.0),
                                                 onPressed: disableSubmit() ? null : () async
                                                 {
@@ -345,19 +334,19 @@ class _AddItemModalState extends State<AddItemModal> {
                                                 style: ElevatedButton.styleFrom(
                                                   onPrimary: Colors. white,
                                                   primary: Colors.green[500],
-                                                  minimumSize: Size(88, 36),
-                                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                                  minimumSize: const Size(88, 36),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 16),
                                                   shape: const RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.all(Radius.circular(50)),
                                                   ),
                                                 ),
 
-                                                label: Text('ADD ITEM', style: TextStyle(fontSize: 15),),
+                                                label: const Text('ADD ITEM', style: TextStyle(fontSize: 15),),
                                               ),
-                                            ),
-                                            Container(
+
+                                            SizedBox(
                                               width: 200,
-                                              child: Text( AuctionTime().getAuctionPostedTime(dateTime), style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color:  Colors.white)),
+                                              child: Text( AuctionTime().getAuctionPostedTime(dateTime), style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color:  Colors.white)),
                                             ),
 
                                           ]
