@@ -25,13 +25,13 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
         home: user?.uid != null ? StreamProvider<List<Products>>.value(value: ProductsDBService().getProducts, initialData: const [], child: const HomePage(),) : const LoginPage(),
-        // routes: user?.uid != null ? (<String, WidgetBuilder>{
-        //   '/landingPage': (BuildContext context) => const MyApp(),
-        //   '/homePage': (BuildContext context) => const HomePage(),
-        // }) :  (<String, WidgetBuilder>{
-        //   '/landingPage': (BuildContext context) => const MyApp(),
-        //   '/homePage': (BuildContext context) => const HomePage(),
-        // })
+        routes: user?.uid != null ? (<String, WidgetBuilder>{
+          '/landingPage': (BuildContext context) => const LoginPage(),
+          '/homePage': (BuildContext context) => StreamProvider<List<Products>>.value(value: ProductsDBService().getProducts, initialData: const [], child: const HomePage(),),
+        }) :  (<String, WidgetBuilder>{
+          '/landingPage': (BuildContext context) => const LoginPage(),
+          '/homePage': (BuildContext context) => StreamProvider<List<Products>>.value(value: ProductsDBService().getProducts, initialData: const [], child: const HomePage(),),
+        })
     );
   }
 }
