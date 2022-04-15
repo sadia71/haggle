@@ -102,15 +102,9 @@ class _MyGranaryState extends State<MyGranary> {
           ],
         ),
       ),
-      body: productList.isNotEmpty
-          ? (_selectOptionItem
-              ? (myProducts.toList().isNotEmpty
-                  ? GesturedCard(items: myProducts.toList())
-                  : const Center(child: Text('You have not added any product')))
-              : (myBids.toList().isNotEmpty
-                  ? GesturedCard(items: myBids.toList())
-                  : const Center(child: Text('You have not made any bid yet'))))
-          : const Center(child: Text('No Data')),
+      body: const Center(
+        child: Text('Show users\' specific data'),
+      )
     );
   }
 }
