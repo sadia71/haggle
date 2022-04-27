@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:haggle/firebase/BidsManagement.dart';
 import 'package:haggle/firebase/UserManagement.dart';
 
 import 'package:haggle/utilities/BidsDataTable.dart';
@@ -94,7 +95,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                       )
                                   ),
 
-                                  const SizedBox(height: 30,),
+                                  const SizedBox(height: 20,),
                                   CountdownTimer(
                                     endTime: timeInMilliSeconds,
 
@@ -108,6 +109,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                             if(snapshot.hasData && snapshot.data!.docs.isNotEmpty){
 
                                               var winnerInfo = snapshot.data!.docs[0];
+                                              BidsManagement().addWinner(item['postId'], winnerInfo['userId'], winnerInfo['bidPrice']);
 
                                               return  Container(
                                                   width: MediaQuery.of(context).size.width,
@@ -184,7 +186,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                                   icon: const Icon( Icons.attach_money),
                                                   backgroundColor: Colors.blue[500], label: const Text('MAKE A BID'),
                                                 ),
-                                                const SizedBox(height: 30,),
+
                                                 StreamBuilder(
                                                   stream: FirebaseFirestore.instance.collection('items')
                                                       .doc(item['postId']).collection('bid-users').orderBy(

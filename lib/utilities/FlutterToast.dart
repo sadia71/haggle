@@ -50,8 +50,6 @@ class FlutterToast {
         return ToastGravity.BOTTOM;
       case 'BOTTOM_LEFT':
         return ToastGravity.BOTTOM_LEFT;
-      case 'BOTTOM_RIGHT':
-        return ToastGravity.BOTTOM_RIGHT;
       case 'CENTER_LEFT':
         return ToastGravity.CENTER_LEFT;
       case 'CENTER_RIGHT':

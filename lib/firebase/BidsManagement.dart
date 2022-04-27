@@ -63,6 +63,8 @@ class BidsManagement {
         'bidUsers': [],
         'minBidPrice': int.parse(bidPrice),
         'userId': userId,
+        'winnerId': '',
+        'productSoldAt': 0,
         'addedAt': DateTime.now()
       }, SetOptions(merge: true));
     } catch (e) {
@@ -81,6 +83,18 @@ class BidsManagement {
     } catch (e) {
       print(e.toString());
 
+    }
+  }
+
+  addWinner(postId,winnerId, winnerBidPrice) async{
+    try {
+      await FirebaseFirestore.instance.collection("items").doc(postId).update({
+        "winnerId": winnerId,
+        "productSoldAt": winnerBidPrice
+      });
+    }
+    catch (e){
+      FlutterToast().errorToast(e.toString(), "BOTTOM", 14.0, null);
     }
   }
 
