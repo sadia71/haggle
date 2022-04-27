@@ -2,22 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:haggle/utilities/FlutterToast.dart';
 
 class BidsManagement {
-  makeBid(bidPrice, user, itemId) async {
+  makeBid(bidPrice, user, postId) async {
     try {
       await FirebaseFirestore.instance.
       collection('items')
-          .doc(itemId)
+          .doc(postId)
           .collection('bid-users').doc(user.uid)
           .set({
         'bidPrice': int.parse(bidPrice),
         'userId': user.uid,
-        'itemId': itemId,
+        'postId': postId,
         'bidAt': DateTime.now()
       }, SetOptions(merge: true));
 
       await FirebaseFirestore.instance.
       collection('items')
-          .doc(itemId)
+          .doc(postId)
           .set({
         'bidUsers': FieldValue.arrayUnion([user.uid])
       }, SetOptions(merge: true));
@@ -29,11 +29,11 @@ class BidsManagement {
     }
   }
 
-  updateBid(editedBidPrice, userId, itemId) async {
+  updateBid(editedBidPrice, userId, postId) async {
     try {
       await FirebaseFirestore.instance.
       collection('items')
-          .doc(itemId)
+          .doc(postId)
           .collection('bid-users').doc(userId)
           .update({
         'bidPrice': int.parse(editedBidPrice),
@@ -47,23 +47,23 @@ class BidsManagement {
     }
   }
 
-  addItem(itemName, itemDesc, bidPrice, bidEndTime, userId, images,
-      itemId) async {
+  addItem(productName, productDetails, bidPrice, bidEndTime, userId, images,
+      postId) async {
     try {
       await FirebaseFirestore.instance.
       collection('items')
-          .doc(itemId)
+          .doc(postId)
           .set({
-        'itemName': itemName,
-        'itemId': itemId,
+        'productName': productName,
+        'postId': postId,
         'itemImages': images,
-        'itemDesc': itemDesc,
+        'productDetails': productDetails,
         'isCompleted': false,
         'lastBidTime': bidEndTime,
         'bidUsers': [],
         'minBidPrice': int.parse(bidPrice),
         'userId': userId,
-        'bidAt': DateTime.now()
+        'addedAt': DateTime.now()
       }, SetOptions(merge: true));
     } catch (e) {
       print(e.toString());
@@ -73,9 +73,9 @@ class BidsManagement {
     }
   }
 
-  auctionCompleted(itemId) async {
+  auctionCompleted(postId) async {
     try {
-      await FirebaseFirestore.instance.collection('items').doc(itemId).update({
+      await FirebaseFirestore.instance.collection('items').doc(postId).update({
         'isCompleted': true
       });
     } catch (e) {

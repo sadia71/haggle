@@ -57,12 +57,12 @@ class _AddItemModalState extends State<AddItemModal> {
   Future _uploadFile() async{
     if(files != null){
 
-      final itemId = const Uuid().v4();
+      final postId = const Uuid().v4();
 
 
       files!.map((file) async {
         final imageId = const Uuid().v4();
-        final fileDestination = 'files/$itemId/$imageId';
+        final fileDestination = 'files/$postId/$imageId';
         task = FirebaseStorageApi.uploadFile(fileDestination, file);
         setState(() {
 
@@ -76,7 +76,7 @@ class _AddItemModalState extends State<AddItemModal> {
           });
 
           if(files!.length == imagesAsUrl.length){
-            BidsManagement().addItem(_itemName, _itemDesc, _minBidPrice, dateTime, currentUser!.uid, imagesAsUrl, itemId);
+            BidsManagement().addItem(_itemName, _itemDesc, _minBidPrice, dateTime, currentUser!.uid, imagesAsUrl, postId);
             Navigator.pop(context);
 
           }

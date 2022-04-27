@@ -7,7 +7,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 
 class AuctionTime{
-   getCountDown(lastBidTime, itemId, isCompleted){
+   getCountDown(lastBidTime, postId, isCompleted){
 
     var timeInMilliSeconds = (lastBidTime.seconds * 1000);
 
@@ -17,7 +17,7 @@ class AuctionTime{
 
         if (time == null) {
           if(isCompleted == false) {
-            BidsManagement().auctionCompleted(itemId);
+            BidsManagement().auctionCompleted(postId);
           }
           return Chip(
            avatar: const Icon(Icons.timer_off, size: 15, color: Colors.white,),
@@ -39,18 +39,18 @@ class AuctionTime{
    getTime(time) {
      DateTime date = DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000, );
 
-     return new DateFormat.yMMMd().add_jms().format(date);
+     return DateFormat.yMMMd().add_jms().format(date);
    }
 
    getAuctionPostedTime(time){
 
 
-     return new DateFormat.yMMMd().add_jms().format(time);
+     return DateFormat.yMMMd().add_jms().format(time);
    }
 
    getPostedDay(time){
      DateTime date = DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000, );
-     final ago = date.subtract(new Duration());
+     final ago = date.subtract(const Duration());
      return timeago.format(ago);
 
    }

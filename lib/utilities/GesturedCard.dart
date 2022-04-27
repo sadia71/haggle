@@ -43,14 +43,14 @@ class _GesturedCardState extends State<GesturedCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           UserManagement().getPostedUser(itemData.userId, 'MODERATE_NAME', 10.0, 14.0, false, false, true),
-                          Text(AuctionTime().getPostedDay(itemData.bidAt))
+                          Text(AuctionTime().getPostedDay(itemData.addedAt))
                         ],
                       )
 
                   ),
                   Carousel().imageCarousel(itemData.itemImages, 180.0),
                   Container(
-                    child: AuctionTime().getCountDown(itemData.lastBidTime, itemData.itemId, itemData.isCompleted),
+                    child: AuctionTime().getCountDown(itemData.lastBidTime, itemData.postId, itemData.isCompleted),
                   ),
 
                   Container(
@@ -60,7 +60,7 @@ class _GesturedCardState extends State<GesturedCard> {
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child:Text(itemData.itemName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                          child:Text(itemData.productName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                           alignment: Alignment.topLeft,
                         ),
 

@@ -8,7 +8,7 @@ class ProductsDBService{
 
   Stream<List<Products>> get getProducts{
     return firestore
-        .collection('items').orderBy('bidAt' , descending: true)
+        .collection('items').orderBy('addedAt' , descending: true)
         .snapshots(includeMetadataChanges: true)
         .map((snapshot){
           return snapshot.docs.map((doc) => Products.fromSnapshot(doc)).toList();

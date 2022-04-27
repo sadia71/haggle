@@ -3,48 +3,48 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Products extends Equatable{
-  final String itemId;
+  final String postId;
   final String userId;
-  final String itemDesc;
-  final String itemName;
+  final String productDetails;
+  final String productName;
   final bool isCompleted;
-  final Timestamp bidAt;
+  final Timestamp addedAt;
   final Timestamp lastBidTime;
   final List itemImages;
   final List bidUsers;
   final int minBidPrice;
 
   const Products({
-    required this.itemId,
+    required this.postId,
     required this.userId,
-    required this.itemDesc,
+    required this.productDetails,
     required this.isCompleted,
-    required this.bidAt,
+    required this.addedAt,
     required this.lastBidTime,
     required this.itemImages,
     required this.bidUsers,
-    required this.itemName,
+    required this.productName,
     required this.minBidPrice,
 
 });
 
   static Products fromSnapshot(DocumentSnapshot product){
     return Products(
-      itemId: product['itemId'],
+      postId: product['postId'],
       userId: product['userId'],
-      itemDesc: product['itemDesc'],
+      productDetails: product['productDetails'],
       isCompleted: product['isCompleted'],
-        bidAt: product['bidAt'],
+        addedAt: product['addedAt'],
       lastBidTime: product['lastBidTime'],
         itemImages: product['itemImages'],
       bidUsers: product['bidUsers'],
-        itemName: product['itemName'],
+        productName: product['productName'],
       minBidPrice: product['minBidPrice'],
     );
   }
   @override
   List<Object?> get props => [
-    itemId,userId, itemDesc, isCompleted, bidAt, lastBidTime, itemImages,bidUsers, itemName, minBidPrice
+    postId,userId, productDetails, isCompleted, addedAt, lastBidTime, itemImages,bidUsers, productName, minBidPrice
   ];
 
 }

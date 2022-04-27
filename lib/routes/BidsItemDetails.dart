@@ -35,7 +35,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
         title: const Text('DETAILS'),
       ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            stream: FirebaseFirestore.instance.collection('items').doc(details.itemId).snapshots(includeMetadataChanges: true),
+            stream: FirebaseFirestore.instance.collection('items').doc(details.postId).snapshots(includeMetadataChanges: true),
             builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot){
 
               if (snapshot.hasData){
@@ -56,7 +56,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                           const SizedBox(height: 5,),
                           Carousel().imageCarousel(item['itemImages'], 220.0),
                           Container(
-                            child: AuctionTime().getCountDown(item['lastBidTime'], item['itemId'], item['isCompleted']),
+                            child: AuctionTime().getCountDown(item['lastBidTime'], item['postId'], item['isCompleted']),
                           ),
 
                           Container(
@@ -66,13 +66,13 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
 
                                   Container(
                                       alignment: Alignment.topLeft,
-                                      child : Text(item['itemName'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),textAlign: TextAlign.start,)
+                                      child : Text(item['productName'], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),textAlign: TextAlign.start,)
 
                                   ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(vertical: 5),
                                     alignment: Alignment.topLeft,
-                                    child: Text(item['itemDesc'], style: const TextStyle(fontSize: 16),),
+                                    child: Text(item['productDetails'], style: const TextStyle(fontSize: 16),),
                                   ),
                                   Container(
                                       alignment: Alignment.topLeft,
@@ -103,7 +103,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                       if (time == null) {
                                         return StreamBuilder(
                                           stream: FirebaseFirestore.instance.collection('items')
-                                              .doc(item['itemId']).collection('bid-users').orderBy('bidPrice', descending: true).limit(1).snapshots(),
+                                              .doc(item['postId']).collection('bid-users').orderBy('bidPrice', descending: true).limit(1).snapshots(),
                                           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
                                             if(snapshot.hasData && snapshot.data!.docs.isNotEmpty){
 
@@ -175,7 +175,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                                           return SingleChildScrollView(
                                                             child: Container(
                                                               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                              child: BottomModal(item['minBidPrice'], item['itemId'], '', 0, 'EDIT'),
+                                                              child: BottomModal(item['minBidPrice'], item['postId'], '', 0, 'EDIT'),
 
                                                             ),
                                                           );
@@ -187,13 +187,13 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                                 const SizedBox(height: 30,),
                                                 StreamBuilder(
                                                   stream: FirebaseFirestore.instance.collection('items')
-                                                      .doc(item['itemId']).collection('bid-users').orderBy(
+                                                      .doc(item['postId']).collection('bid-users').orderBy(
                                                       'bidPrice', descending: true).snapshots(),
                                                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                                                     if (snapshot.hasData) {
                                                       return BidsDataTable().table(
                                                           snapshot.data!.docs, context, item['minBidPrice'],
-                                                          item['itemId'], user.uid);
+                                                          item['postId'], user.uid);
                                                     } else {
                                                       return Center(
                                                         child: CircularProgressIndicator(color: Colors.blue[500],),
