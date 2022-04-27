@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:haggle/model/Products.dart';
 import 'package:haggle/utilities/GesturedCard.dart';
@@ -102,9 +101,15 @@ class _MyGranaryState extends State<MyGranary> {
           ],
         ),
       ),
-      body: const Center(
-        child: Text('Show users\' specific data'),
-      )
+      body: productList.isNotEmpty
+          ? (_selectOptionItem
+              ? (myProducts.toList().isNotEmpty
+                  ? GesturedCard(items: myProducts.toList())
+                  : const Center(child: Text('You have not added any product')))
+              : (myBids.toList().isNotEmpty
+                  ? GesturedCard(items: myBids.toList())
+                  : const Center(child: Text('You have not made any bid yet'))))
+          : const Center(child: Text('No Data')),
     );
   }
 }
