@@ -21,7 +21,6 @@ class BidsItemDetails extends StatefulWidget {
 
 class _BidsItemDetailsState extends State<BidsItemDetails> {
 
-  var hasBid;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
         title: const Text('DETAILS'),
       ),
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            stream: FirebaseFirestore.instance.collection('items').doc(details['itemId']).snapshots(includeMetadataChanges: true),
+            stream: FirebaseFirestore.instance.collection('items').doc(details.itemId).snapshots(includeMetadataChanges: true),
             builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot){
 
               if (snapshot.hasData){
@@ -81,7 +80,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Chip(
-                                            label: Text('\$${item['minBidPrice']}(Min)', style: const TextStyle(fontSize: 16, color: Colors.white),),
+                                            label: Text('৳${item['minBidPrice']}(Min)', style: const TextStyle(fontSize: 16, color: Colors.white),),
                                             backgroundColor: Colors.blue[500],
                                             shadowColor: Colors.black12,
                                           ),
@@ -140,7 +139,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                                         ),
                                                         child: Container(
                                                             padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                                                            child: Text('\$${winnerInfo['bidPrice']}',
+                                                            child: Text('৳${winnerInfo['bidPrice']}',
                                                               style: const TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),)),
                                                       ),
                                                     ],

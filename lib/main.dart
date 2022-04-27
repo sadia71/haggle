@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:haggle/database-services/ProductsDBService.dart';
+import 'package:haggle/model/Products.dart';
 import 'package:haggle/routes/HomePage.dart';
 import 'package:haggle/routes/LoginPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,13 +24,13 @@ class MyApp extends StatelessWidget {
 
 
     return MaterialApp(
-        home: user?.uid != null ? const HomePage() : const LoginPage(),
+        home: user?.uid != null ? StreamProvider<List<Products>>.value(value: ProductsDBService().getProducts, initialData: const [], child: const HomePage(),) : const LoginPage(),
         routes: user?.uid != null ? (<String, WidgetBuilder>{
-          '/landingPage': (BuildContext context) => const MyApp(),
-          '/homePage': (BuildContext context) => const HomePage(),
+          '/landingPage': (BuildContext context) => const LoginPage(),
+          '/homePage': (BuildContext context) => StreamProvider<List<Products>>.value(value: ProductsDBService().getProducts, initialData: const [], child: const HomePage(),),
         }) :  (<String, WidgetBuilder>{
-          '/landingPage': (BuildContext context) => const MyApp(),
-          '/homePage': (BuildContext context) => const HomePage(),
+          '/landingPage': (BuildContext context) => const LoginPage(),
+          '/homePage': (BuildContext context) => StreamProvider<List<Products>>.value(value: ProductsDBService().getProducts, initialData: const [], child: const HomePage(),),
         })
     );
   }
