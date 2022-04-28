@@ -167,6 +167,34 @@ class ProfilePage extends StatelessWidget {
                   color: Colors.blue.withOpacity(0.3),
                 ),
 
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          Text('SELL', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+                          CircleAvatar(radius: 50, child: Text('৳2000', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white) ,),
+                            backgroundColor: Colors.blue,),
+                        ],
+                      ),
+
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                           Text('BUY', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+                          CircleAvatar(radius: 50, child: Text('৳2000', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white) ,),
+                            backgroundColor: Colors.green,),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+
               ],
             ),
             decoration: BoxDecoration(
@@ -179,7 +207,6 @@ class ProfilePage extends StatelessWidget {
                 ],
                 color: Colors.white,
                 borderRadius: const BorderRadius.all(Radius.circular(5.0))),
-            height: 120,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.all(5.0),
             margin: const EdgeInsets.symmetric(horizontal: 10.0),

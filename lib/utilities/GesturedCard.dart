@@ -75,7 +75,7 @@ class _GesturedCardState extends State<GesturedCard> {
                                 ),
 
                                 Text(
-                                  'last time : '+ AuctionTime().getTime(itemData.lastBidTime),
+                                  'Bid Before : '+ AuctionTime().getTime(itemData.lastBidTime),
                                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                                 ),
                               ],
