@@ -76,7 +76,31 @@ class UserManagement {
                         colorWhite, isFontBold)
                   ]);
           } else {
-            return const Text('Loading');
+            return
+              isRow ?
+              Row(children: [
+                CircleAvatar(
+                  backgroundColor:  Colors.grey,
+                  radius: avatarSize,
+                  child: const SizedBox(width: 1, height: 1,)
+              ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Container(height: 10, width: 50, color: Colors.grey,)
+              ]) :
+              Column(children: [
+                CircleAvatar(
+                    backgroundColor:  Colors.grey,
+                    radius: avatarSize,
+                    child: const SizedBox(width: 1, height: 1,)
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Container(height: 10, width: 50, color: Colors.grey,)
+              ]);
+
           }
         });
   }
@@ -96,7 +120,7 @@ class UserManagement {
                 ?  Column(
               children: [
                 Text( showToSeller ? 'Email buyer to add Address' : 'Add Address and Cell Number in Profile.', style: const TextStyle(color: Colors.orange, fontSize: 14)),
-                InputChip(
+                showToSeller ? InputChip(
                   avatar: const Icon(Icons.email),
                   label: const Text('Mail Buyer'),
                   onPressed: () async{
@@ -118,13 +142,13 @@ class UserManagement {
                     await launchUrl(launchUri);
                   },
 
-                ),
+                ) : Container(),
               ],
             )
                 : Column(
               children: [
                 Text(showToSeller ? 'Product must deliver @ ' + userData['address'] : "Product will deliver @ " + userData['address'], style: const TextStyle(color: Colors.white, fontSize: 18)),
-                InputChip(
+                showToSeller ? InputChip(
                   avatar: const Icon(Icons.call),
                   label: const Text('Make Contact'),
                   onPressed: () async{
@@ -135,8 +159,7 @@ class UserManagement {
 
                     await launchUrl(launchUri);
                   },
-
-                ),
+                ) : Container(),
               ],
             );
           } else {
