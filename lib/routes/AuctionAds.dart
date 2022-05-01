@@ -14,6 +14,19 @@ class AuctionAds extends StatefulWidget {
 }
 
 class _AuctionAdsState extends State<AuctionAds> {
+  bool showCircular = true;
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 5000), () {
+      setState(() {
+        showCircular = false;
+      });
+    });
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
@@ -67,8 +80,8 @@ class _AuctionAdsState extends State<AuctionAds> {
         body: productList.isNotEmpty
             ? GesturedCard(items: productList)
             : Center(
-                child: CircularProgressIndicator(
+                child: showCircular ? CircularProgressIndicator(
                 color: Colors.blue[500],
-              )));
+              ) : const Text('No Auction Ads Found!')));
   }
 }

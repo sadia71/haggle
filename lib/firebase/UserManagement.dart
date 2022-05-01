@@ -11,6 +11,8 @@ class UserManagement {
         'userId': user.uid,
         'userName': user.displayName,
         'photoURL': user.photoURL,
+        'address': '',
+        'cellNumber': '',
         'joinedAt': DateTime.now()
       });
     }catch(e){
@@ -19,6 +21,19 @@ class UserManagement {
     finally{
       FlutterToast().successToast('user added', 'BOTTOM', 14.0, null);
     }
+  }
+  updateUserAddressAndCellNumber (userId, address, cellNumber) async{
+    try{
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        "address": address,
+        'cellNumber': cellNumber
+      });
+     FlutterToast().successToast('Address and Cell Number Updated.', 'BOTTOM', 14.0, null);
+    }
+    catch(e){
+      FlutterToast().errorToast('@store :', 'BOTTOM', 14.0, e);
+    }
+
   }
 
   getPostedUser(userId, isFullName, avatarSize, fontSize, colorWhite, isFontBold, isRow) {

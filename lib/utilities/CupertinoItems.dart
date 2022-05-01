@@ -12,7 +12,7 @@ class CupertinoItems{
           child,
         ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text('DONE'),
+          child: const Text('DONE'),
           onPressed: onClicked,
         ),
       ),
@@ -21,7 +21,7 @@ class CupertinoItems{
 
   static void showSuccessSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
-        content: Text(message, style: TextStyle(color: Colors.white), textAlign: TextAlign.center,),
+        content: Text(message, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center,),
       backgroundColor: Colors.green[500],
     );
 
@@ -30,7 +30,7 @@ class CupertinoItems{
 
   static void showErrorSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
-        content: Text(message, style: TextStyle(color: Colors.white), textAlign: TextAlign.center,),
+        content: Text(message, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center,),
       backgroundColor: Colors.green[500],
     );
 

@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:haggle/firebase/BidsManagement.dart';
+
 import 'package:haggle/firebase/UserManagement.dart';
 
 import 'package:haggle/utilities/BidsDataTable.dart';
@@ -109,7 +111,6 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                             if(snapshot.hasData && snapshot.data!.docs.isNotEmpty){
 
                                               var winnerInfo = snapshot.data!.docs[0];
-                                              BidsManagement().addWinner(item['postId'], winnerInfo['userId'], winnerInfo['bidPrice']);
 
                                               return  Container(
                                                   width: MediaQuery.of(context).size.width,
