@@ -9,7 +9,7 @@ import 'dart:core';
 
 class BidsDataTable {
 
-  table(bidUsers, context, bidPrice, postId, currentUserId){
+  table(bidUsers, context, bidPrice, postId, currentUserId, lastBidPrice){
 
 
 
@@ -87,7 +87,7 @@ class BidsDataTable {
                                         return SingleChildScrollView(
                                           child: Container(
                                             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                            child: BottomModal(bidPrice, postId, user['userId'], user['bidPrice'], 'UPDATE'),
+                                            child: BottomModal(bidPrice, postId, user['userId'], user['bidPrice'], 'UPDATE', lastBidPrice),
 
                                           ),
                                         );

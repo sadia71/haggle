@@ -8,9 +8,10 @@ class BottomModal extends StatefulWidget {
   final String userId;
   final int userBidPrice;
   final String modalType;
+  final int lastBidPrice;
 
   const BottomModal(this.lowestBidPrice, this.postId, this.userId,
-      this.userBidPrice, this.modalType, {Key? key}) : super(key: key);
+      this.userBidPrice, this.modalType, this.lastBidPrice, {Key? key}) : super(key: key);
 
   @override
   _BottomModalState createState() => _BottomModalState();
@@ -25,6 +26,7 @@ class _BottomModalState extends State<BottomModal> {
     var userId = widget.userId;
     var userBidPrice = widget.userBidPrice.toString();
     var modalType = widget.modalType;
+    var lastBidPrice = widget.lastBidPrice;
 
     User? user = FirebaseAuth.instance.currentUser;
     return Container(
@@ -51,9 +53,10 @@ class _BottomModalState extends State<BottomModal> {
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
-                  Text('Min bid price : \$$lowestBidPrice'),
+                  lastBidPrice == 0 ? Text('Min bid price : ৳$lowestBidPrice') : Text('Bid to Win > ৳$lastBidPrice'),
                   TextField(
                     autofocus: true,
+                    maxLength: lowestBidPrice.length + 1,
                     keyboardType: TextInputType.number,
                     onChanged: (text) {
                       if (text.isNotEmpty) {
@@ -70,9 +73,10 @@ class _BottomModalState extends State<BottomModal> {
                           Icons.monetization_on,
                           size: 35,
                         ),
-                        onPressed: int.parse(lowestBidPrice) <= int.parse(price)
+                        onPressed: ((lastBidPrice != 0) && lastBidPrice < int.parse(price)) || ( lastBidPrice == 0 && int.parse(lowestBidPrice) <= int.parse(price))
                             ? () {
                                 BidsManagement().makeBid(price, user, postId);
+                                BidsManagement().updateLastBidAndBidder(postId, user!.uid, price);
                                 Navigator.pop(context);
                               }
                             : null,
@@ -100,12 +104,13 @@ class _BottomModalState extends State<BottomModal> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text('Min bid price : \$$lowestBidPrice'),
-                          Text('You have bid : \$$userBidPrice'),
+                          Text('Min bid price : ৳$lowestBidPrice'),
+                          Text('Bid to Win > ৳$userBidPrice', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),),
                         ],
                       ),
                       TextField(
                         autofocus: true,
+                        maxLength: lowestBidPrice.length + 1,
                         keyboardType: TextInputType.number,
                         onChanged: (text) {
                           if (text.isNotEmpty) {
@@ -123,10 +128,11 @@ class _BottomModalState extends State<BottomModal> {
                               size: 35,
                             ),
                             onPressed:
-                                int.parse(userBidPrice) < int.parse(price)
+                                lastBidPrice < int.parse(price)
                                     ? () {
                                         BidsManagement()
                                             .updateBid(price, userId, postId);
+                                        BidsManagement().updateLastBidAndBidder(postId, user!.uid, price);
                                         Navigator.pop(context);
                                       }
                                     : null,

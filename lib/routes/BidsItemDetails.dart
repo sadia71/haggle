@@ -145,6 +145,17 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                                             child: Text('৳${winnerInfo['bidPrice']}',
                                                               style: const TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white),)),
                                                       ),
+
+                                                      user.uid == winnerInfo['userId'] ? Container(
+                                                        padding: const EdgeInsets.only(top: 5.0),
+                                                        alignment: Alignment.center,
+                                                        child: UserManagement().getBidWinnerAddress(winnerInfo['userId'], false),
+                                                      ): Container(),
+                                                      user.uid == item['userId'] ? Container(
+                                                        padding: const EdgeInsets.only(top: 5.0),
+                                                        alignment: Alignment.center,
+                                                        child: UserManagement().getBidWinnerAddress(winnerInfo['userId'], true),
+                                                      ): Container()
                                                     ],
                                                   )
                                               );
@@ -178,7 +189,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                                           return SingleChildScrollView(
                                                             child: Container(
                                                               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                              child: BottomModal(item['minBidPrice'], item['postId'], '', 0, 'EDIT'),
+                                                              child: BottomModal(item['minBidPrice'], item['postId'], '', 0, 'EDIT', item['lastBidPrice']),
 
                                                             ),
                                                           );
@@ -196,7 +207,7 @@ class _BidsItemDetailsState extends State<BidsItemDetails> {
                                                     if (snapshot.hasData) {
                                                       return BidsDataTable().table(
                                                           snapshot.data!.docs, context, item['minBidPrice'],
-                                                          item['postId'], user.uid);
+                                                          item['postId'], user.uid, item['lastBidPrice']);
                                                     } else {
                                                       return Center(
                                                         child: CircularProgressIndicator(color: Colors.blue[500],),

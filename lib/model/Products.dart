@@ -13,6 +13,7 @@ class Products extends Equatable{
   final List itemImages;
   final List bidUsers;
   final int minBidPrice;
+  final int lastBidPrice;
 
   const Products({
     required this.postId,
@@ -25,6 +26,7 @@ class Products extends Equatable{
     required this.bidUsers,
     required this.productName,
     required this.minBidPrice,
+    required this.lastBidPrice
 
 });
 
@@ -40,11 +42,12 @@ class Products extends Equatable{
       bidUsers: product['bidUsers'],
         productName: product['productName'],
       minBidPrice: product['minBidPrice'],
+      lastBidPrice: product['lastBidPrice']
     );
   }
   @override
   List<Object?> get props => [
-    postId,userId, productDetails, isCompleted, addedAt, lastBidTime, itemImages,bidUsers, productName, minBidPrice
+    postId,userId, productDetails, isCompleted, addedAt, lastBidTime, itemImages,bidUsers, productName, minBidPrice,lastBidPrice
   ];
 
 }

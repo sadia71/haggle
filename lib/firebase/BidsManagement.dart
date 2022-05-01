@@ -63,12 +63,12 @@ class BidsManagement {
         'bidUsers': [],
         'minBidPrice': int.parse(bidPrice),
         'userId': userId,
-        'winnerId': '',
-        'productSoldAt': 0,
+        'lastBidUserId': '',
+        'lastBidPrice': 0,
         'addedAt': DateTime.now()
       }, SetOptions(merge: true));
     } catch (e) {
-      print(e.toString());
+      FlutterToast().errorToast('@error ', "BOTTOM", 14.0, e.toString());
     }
     finally {
 
@@ -81,17 +81,19 @@ class BidsManagement {
         'isCompleted': true
       });
     } catch (e) {
-      print(e.toString());
+      FlutterToast().errorToast('@error ', "BOTTOM", 14.0, e.toString());
 
     }
   }
 
-  addWinner(postId,winnerId, winnerBidPrice) async{
+  updateLastBidAndBidder(postId, lastBidUserId, lastBidPrice) async{
     try {
-      await FirebaseFirestore.instance.collection("items").doc(postId).update({
-        "winnerId": winnerId,
-        "productSoldAt": winnerBidPrice
-      });
+      print('lastBidUserId');
+      print(lastBidUserId);
+      await FirebaseFirestore.instance.collection("items").doc(postId).set({
+        "lastBidUserId": lastBidUserId,
+        "lastBidPrice": int.parse(lastBidPrice)
+      }, SetOptions(merge: true));
     }
     catch (e){
       FlutterToast().errorToast(e.toString(), "BOTTOM", 14.0, null);

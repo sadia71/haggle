@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:haggle/utilities/FlutterToast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserManagement {
-  storeNewUser (user) async{
-
-    try{
+  User? user = FirebaseAuth.instance.currentUser;
+  storeNewUser(user) async {
+    try {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
         'email': user.email,
         'userId': user.uid,
@@ -15,73 +17,164 @@ class UserManagement {
         'cellNumber': '',
         'joinedAt': DateTime.now()
       });
-    }catch(e){
+    } catch (e) {
       FlutterToast().errorToast('@store :', 'BOTTOM', 14.0, e);
-    }
-    finally{
+    } finally {
       FlutterToast().successToast('user added', 'BOTTOM', 14.0, null);
     }
   }
-  updateUserAddressAndCellNumber (userId, address, cellNumber) async{
-    try{
-      await FirebaseFirestore.instance.collection('users').doc(userId).update({
-        "address": address,
-        'cellNumber': cellNumber
-      });
-     FlutterToast().successToast('Address and Cell Number Updated.', 'BOTTOM', 14.0, null);
-    }
-    catch(e){
+
+  updateUserAddressAndCellNumber(userId, address, cellNumber) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .update({"address": address, 'cellNumber': cellNumber});
+      FlutterToast().successToast(
+          'Address and Cell Number Updated.', 'BOTTOM', 14.0, null);
+    } catch (e) {
       FlutterToast().errorToast('@store :', 'BOTTOM', 14.0, e);
     }
-
   }
 
-  getPostedUser(userId, isFullName, avatarSize, fontSize, colorWhite, isFontBold, isRow) {
-
+  getPostedUser(
+      userId, isFullName, avatarSize, fontSize, colorWhite, isFontBold, isRow) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').doc(userId).snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasData) {
             var userData = snapshot.data;
-            return isRow ? Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(userData!['photoURL'],),
-                    radius: avatarSize,
-                  ),
-                  const SizedBox(width: 5,),
-                  getName(userData['userName'], isFullName, fontSize, colorWhite, isFontBold)
-                ]
-            ) : Column(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(userData!['photoURL'],),
-                    radius: avatarSize,
-                  ),
-                  const SizedBox(width: 5,),
-                  getName(userData['userName'], isFullName, fontSize, colorWhite, isFontBold)
-                ]
-            );
-
-          }
-          else {
+            return isRow
+                ? Row(children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        userData!['photoURL'],
+                      ),
+                      radius: avatarSize,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    getName(userData['userName'], isFullName, fontSize,
+                        colorWhite, isFontBold)
+                  ])
+                : Column(children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        userData!['photoURL'],
+                      ),
+                      radius: avatarSize,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    getName(userData['userName'], isFullName, fontSize,
+                        colorWhite, isFontBold)
+                  ]);
+          } else {
             return const Text('Loading');
           }
-        }
-    );
+        });
   }
 
-  getName(name, naming, fontSize, colorWhite, isFontBold,) {
+  getBidWinnerAddress(winnerId, showToSeller) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(winnerId)
+            .snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.hasData) {
+            var userData = snapshot.data;
+
+            return userData!['address'] == '' || userData['cellNumber'] == ''
+                ?  Column(
+              children: [
+                Text( showToSeller ? 'Email buyer to add Address' : 'Add Address and Cell Number in Profile.', style: const TextStyle(color: Colors.orange, fontSize: 14)),
+                InputChip(
+                  avatar: const Icon(Icons.email),
+                  label: const Text('Mail Buyer'),
+                  onPressed: () async{
+                    String? encodeQueryParameters(Map<String, String> params) {
+                      return params.entries
+                          .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+                          .join('&');
+                    }
+                    final Uri launchUri = Uri(
+                        scheme: 'mailto',
+                        path: userData['email'],
+                      query: encodeQueryParameters(<String, String>{
+                          'subject' : 'Please update your address and cell number.',
+                        'body': 'Dear, ${userData['userName']},\n Please update your Address and Cell Phone Number from'
+                            ' your profile in HaggleBD as I can send your product as soon as possible.\n\nThanks and Regards,\n ${user!.displayName}\nSeller, HaggleBD.',
+                      })
+                    ) ;
+
+                    await launchUrl(launchUri);
+                  },
+
+                ),
+              ],
+            )
+                : Column(
+              children: [
+                Text(showToSeller ? 'Product must deliver @ ' + userData['address'] : "Product will deliver @ " + userData['address'], style: const TextStyle(color: Colors.white, fontSize: 18)),
+                InputChip(
+                  avatar: const Icon(Icons.call),
+                  label: const Text('Make Contact'),
+                  onPressed: () async{
+                    final Uri launchUri = Uri(
+                        scheme: 'tel',
+                        path: '+88'+userData['cellNumber']
+                    ) ;
+
+                    await launchUrl(launchUri);
+                  },
+
+                ),
+              ],
+            );
+          } else {
+            return Container();
+          }
+        });
+  }
+
+  getName(
+    name,
+    naming,
+    fontSize,
+    colorWhite,
+    isFontBold,
+  ) {
     List<String> nameList = name.split(" ");
 
-      if(naming == 'SHORT_NAME'){
-        return Text(nameList[0],
-            style: TextStyle(fontSize: fontSize, fontWeight: isFontBold ? FontWeight.bold : FontWeight.normal, color: colorWhite ? Colors.white : Colors.black.withOpacity(0.7)));
-      } else if(naming == "MODERATE_NAME" && nameList.length > 1){
-        return Text(nameList[0] + ' '+nameList[1], style: TextStyle(fontSize: fontSize, fontWeight: isFontBold ? FontWeight.bold : FontWeight.normal, color: colorWhite ? Colors.white : Colors.black.withOpacity(0.7)));
-      } else {
-        return Text(name, style: TextStyle(fontSize: fontSize, fontWeight: isFontBold ? FontWeight.bold : FontWeight.normal, color: colorWhite ? Colors.white : Colors.black.withOpacity(0.7)));
-      }
+    if (naming == 'SHORT_NAME') {
+      return Text(nameList[0],
+          style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: isFontBold ? FontWeight.bold : FontWeight.normal,
+              color:
+                  colorWhite ? Colors.white : Colors.black.withOpacity(0.7)));
+    } else if (naming == "MODERATE_NAME" && nameList.length > 1) {
+      return Text(nameList[0] + ' ' + nameList[1],
+          style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: isFontBold ? FontWeight.bold : FontWeight.normal,
+              color:
+                  colorWhite ? Colors.white : Colors.black.withOpacity(0.7)));
+    } else {
+      return Text(name,
+          style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: isFontBold ? FontWeight.bold : FontWeight.normal,
+              color:
+                  colorWhite ? Colors.white : Colors.black.withOpacity(0.7)));
     }
-
+  }
 }
