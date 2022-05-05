@@ -65,7 +65,7 @@ class _AuctionAdsState extends State<AuctionAds> {
                 onTap: () {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
-                    return const ProfilePage();
+                    return ProfilePage(productList: productList);
                   }));
                   //Navigator.of(context).pushNamed('/profilePage');
                 },
