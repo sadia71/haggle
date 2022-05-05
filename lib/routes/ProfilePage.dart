@@ -291,9 +291,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children:  [
-                                  Text('Total Value: ${getTotalValue(myProducts)}', style: const TextStyle(fontSize: 20.0),),
+                                  Text('Total Value: ৳${getTotalValue(myProducts)}', style: const TextStyle(fontSize: 20.0),),
                                   const SizedBox(width: 30,),
-                                  Text('Total Sell: ${getTotalSell(myProducts)}', style: TextStyle(fontSize: 20.0,
+                                  Text('Total Sell: ৳${getTotalSell(myProducts)}', style: TextStyle(fontSize: 20.0,
                                       color: getTotalSell(myProducts) > getTotalValue(myProducts) ? Colors.green : Colors.red)),
                                 ],
                               )
