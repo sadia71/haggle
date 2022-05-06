@@ -1,4 +1,3 @@
-import 'package:haggle/utilities/pie-chart/ChartData/ChartData.dart';
 import 'package:flutter/material.dart';
 
 class LegendWidget extends StatelessWidget {

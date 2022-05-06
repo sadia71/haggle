@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
             try {
               await _signInWithGoogle();
             } catch (e) {
-              print(e);
+              FlutterToast().errorToast('@googleSignIn', "BOTTOM", 14.0, e);
             }
           },
           label: Row(

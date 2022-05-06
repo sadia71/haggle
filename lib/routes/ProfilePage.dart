@@ -22,7 +22,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Map? userData;
   @override
   void initState() {
-    userSub = FirebaseFirestore.instance.collection('users').doc(user!.uid).snapshots().listen((snap) {
+    userSub = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .snapshots()
+        .listen((snap) {
       setState(() {
         userData = snap.data()!;
       });
@@ -30,6 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -39,19 +44,19 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-
     final Iterable myProducts =
-    widget.productList.where((product) => product.userId == user?.uid);
+        widget.productList.where((product) => product.userId == user?.uid);
 
-    final Iterable myBids = widget.productList.where((product) {
-      return product.bidUsers.contains(user!.uid);
-    });
+    final Iterable myBids = widget.productList.where((product) =>
+        product.isCompleted == true &&
+        product.bidUsers.contains(user?.uid) &&
+        product.lastBidUserId == user?.uid);
 
     var userImage = user?.photoURL;
 
-    getTotalValue(myProducts){
+    getTotalValue(myProducts) {
       int totalValue = 0;
-      myProducts.forEach((product){
+      myProducts.forEach((product) {
         int bidPrice = product.minBidPrice;
         totalValue += bidPrice;
       });
@@ -59,16 +64,26 @@ class _ProfilePageState extends State<ProfilePage> {
       return totalValue;
     }
 
-    getTotalSell(myProducts){
+    getTotalSell(myProducts) {
       int totalSell = 0;
-      final Iterable completed = myProducts.where((product) => product.isCompleted == true && product.lastBidPrice > product.minBidPrice);
-      completed.toList().forEach((product){
+      final Iterable completed = myProducts.where((product) =>
+          product.isCompleted == true &&
+          product.lastBidPrice > product.minBidPrice);
+      completed.toList().forEach((product) {
         int lastBidPrice = product.lastBidPrice;
         totalSell += lastBidPrice;
       });
 
       return totalSell;
+    }
 
+    getTotalBuy(biddingProduct) {
+      int totalBuy = 0;
+      biddingProduct.toList().forEach((product) {
+        int lastBidPrice = product.lastBidPrice;
+        totalBuy += lastBidPrice;
+      });
+      return totalBuy;
     }
 
     return Scaffold(
@@ -97,8 +112,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-      body:SingleChildScrollView(
-        child:  Column(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
             Container(
               decoration: BoxDecoration(
@@ -157,22 +172,24 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ],
                           ),
-                          userData != null && userData!['cellNumber'] != '' ? Row(
-                            children: [
-                              const Icon(
-                                Icons.call,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                              Text("  " + userData!['cellNumber'],
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white),
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left),
-                            ],
-                          ) : Container(),
+                          userData != null && userData!['cellNumber'] != ''
+                              ? Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.call,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
+                                    Text("  " + userData!['cellNumber'],
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.left),
+                                  ],
+                                )
+                              : Container(),
                           Row(
                             children: [
                               const Icon(
@@ -189,22 +206,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                   textAlign: TextAlign.left),
                             ],
                           ),
-                          userData != null && userData!['address'] != '' ? Row(
-                            children: [
-                              const Icon(
-                                Icons.person_pin_circle,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                              Text("  " + userData!['address'],
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white),
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left),
-                            ],
-                          ) : Container(),
+                          userData != null && userData!['address'] != ''
+                              ? Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.person_pin_circle,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
+                                    Text("  " + userData!['address'],
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.left),
+                                  ],
+                                )
+                              : Container(),
                         ],
                       ),
                     ],
@@ -231,7 +250,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                       bottom: MediaQuery.of(context)
                                           .viewInsets
                                           .bottom),
-                                  child: UpdateAddressAndPhoneModal(userAddress:  userData != null && userData!['address'] != '' ? userData!['address'] : '', userCellNumber: userData != null && userData!['cellNumber'] != '' ? userData!['cellNumber'] : '', ),
+                                  child: UpdateAddressAndPhoneModal(
+                                    userAddress: userData != null &&
+                                            userData!['address'] != ''
+                                        ? userData!['address']
+                                        : '',
+                                    userCellNumber: userData != null &&
+                                            userData!['cellNumber'] != ''
+                                        ? userData!['cellNumber']
+                                        : '',
+                                  ),
                                 ),
                               );
                             });
@@ -272,36 +300,86 @@ class _ProfilePageState extends State<ProfilePage> {
                     endIndent: 0,
                     color: Colors.blue.withOpacity(0.3),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children:  [
-                            const Text(
-                              'SELL',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 25),
-                            ),
-                            widget.productList.isNotEmpty && myProducts.toList().isNotEmpty ?
-                            Column(children: [
-                              PieChartPage(myProducts: myProducts.toList()),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children:  [
-                                  Text('Total Value: ৳${getTotalValue(myProducts)}', style: const TextStyle(fontSize: 20.0),),
-                                  const SizedBox(width: 30,),
-                                  Text('Total Sell: ৳${getTotalSell(myProducts)}', style: TextStyle(fontSize: 20.0,
-                                      color: getTotalSell(myProducts) > getTotalValue(myProducts) ? Colors.green : Colors.red)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          const Text(
+                            'SELL',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 22),
+                          ),
+                          widget.productList.isNotEmpty &&
+                                  myProducts.toList().isNotEmpty
+                              ? Column(
+                                  children: [
+                                    PieChartPage(
+                                        myProducts: myProducts.toList()),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Total Value: ৳${getTotalValue(myProducts)}',
+                                          style:
+                                              const TextStyle(fontSize: 20.0),
+                                        ),
+                                        const SizedBox(
+                                          width: 30,
+                                        ),
+                                        Text(
+                                            'Total Sell: ৳${getTotalSell(myProducts)}',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                color:
+                                                    getTotalSell(myProducts) >
+                                                            getTotalValue(
+                                                                myProducts)
+                                                        ? Colors.green
+                                                        : Colors.red)),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              : const Text('Add Product'),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    height: 10,
+                    thickness: 1,
+                    indent: 0,
+                    endIndent: 0,
+                    color: Colors.blue.withOpacity(0.3),
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'BUY',
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      myBids.toList().isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text('Total Buy: ৳${getTotalBuy(myBids)}',
+                                      style: const TextStyle(
+                                          fontSize: 20, color: Colors.blue)),
+                                  Text('Bid Win: ${myBids.toList().length}',
+                                      style: const TextStyle(
+                                          fontSize: 20, color: Colors.green)),
                                 ],
-                              )
-                            ],) : const Text('Add Product'),
-                          ],
-                        ),
-                      ],
-                    ),
+                              ),
+                            )
+                          : const Text('Bid and Win a product.'),
+                    ],
                   )
                 ],
               ),

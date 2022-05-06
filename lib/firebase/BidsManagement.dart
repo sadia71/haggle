@@ -88,8 +88,6 @@ class BidsManagement {
 
   updateLastBidAndBidder(postId, lastBidUserId, lastBidPrice) async{
     try {
-      print('lastBidUserId');
-      print(lastBidUserId);
       await FirebaseFirestore.instance.collection("items").doc(postId).set({
         "lastBidUserId": lastBidUserId,
         "lastBidPrice": int.parse(lastBidPrice)
