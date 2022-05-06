@@ -43,15 +43,3 @@ class Carousel {
   }
 
 }
-
-// Container(
-// width: MediaQuery.of(context).size.width,
-// margin: const EdgeInsets.symmetric(horizontal: 5.0),
-// decoration: BoxDecoration(
-// borderRadius: BorderRadius.circular(5),
-// image: DecorationImage(
-// image: NetworkImage(image['imageUrl'].toString()),
-// fit: BoxFit.cover,
-// )
-// ),
-// );
