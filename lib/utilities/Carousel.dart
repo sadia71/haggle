@@ -28,8 +28,8 @@ class Carousel {
               ),
               progressIndicatorBuilder: (context, url, downloadProgress) =>
               Container(
-                height: 70,
-                width: 70,
+                height: 50,
+                width: 50,
                 alignment: Alignment.center,
                 child:  CircularProgressIndicator(value: downloadProgress.progress, color: Colors.green,),
               ),

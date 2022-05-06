@@ -70,14 +70,20 @@ class _AuctionAdsState extends State<AuctionAds> {
                     //Navigator.of(context).pushNamed('/profilePage');
                   },
                   child: CachedNetworkImage(
-                    imageUrl: userImage.toString(),
-                    imageBuilder: (context, imageProvider) => CircleAvatar(
-                      backgroundImage: imageProvider,
-                      radius: 25,
-                    ),
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          CircularProgressIndicator(value: downloadProgress.progress, color: Colors.green,)
-                  ))
+                      imageUrl: userImage.toString(),
+                      imageBuilder: (context, imageProvider) => CircleAvatar(
+                            backgroundImage: imageProvider,
+                            radius: 25,
+                          ),
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  color: Colors.green,
+                                ),
+                              )))
             ],
           ),
         ),
