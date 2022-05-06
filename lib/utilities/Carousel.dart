@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Carousel {
 
@@ -12,16 +13,28 @@ class Carousel {
 
         return  Builder(
           builder: (BuildContext context) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+            return CachedNetworkImage(
+              imageUrl: image['imageUrl'],
+              imageBuilder: (context, imageProvider) => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
-                    image: NetworkImage(image['imageUrl'].toString()),
+                    image: imageProvider,
                     fit: BoxFit.cover,
                   )
+                ),
               ),
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+              Container(
+                height: 70,
+                width: 70,
+                alignment: Alignment.center,
+                child:  CircularProgressIndicator(value: downloadProgress.progress, color: Colors.green,),
+              ),
+
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             );
           },
         );
@@ -30,3 +43,15 @@ class Carousel {
   }
 
 }
+
+// Container(
+// width: MediaQuery.of(context).size.width,
+// margin: const EdgeInsets.symmetric(horizontal: 5.0),
+// decoration: BoxDecoration(
+// borderRadius: BorderRadius.circular(5),
+// image: DecorationImage(
+// image: NetworkImage(image['imageUrl'].toString()),
+// fit: BoxFit.cover,
+// )
+// ),
+// );

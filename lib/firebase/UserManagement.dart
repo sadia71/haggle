@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,12 +51,21 @@ class UserManagement {
             var userData = snapshot.data;
             return isRow
                 ? Row(children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        userData!['photoURL'],
-                      ),
-                      radius: avatarSize,
-                    ),
+                    CachedNetworkImage(
+                        imageUrl: userData!['photoURL'],
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                              backgroundImage: imageProvider,
+                              radius: avatarSize,
+                            ),
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => SizedBox(
+                                  height: avatarSize,
+                                  width: avatarSize,
+                                  child: CircularProgressIndicator(
+                                    value: downloadProgress.progress,
+                                    color: Colors.green,
+                                  ),
+                                )),
                     const SizedBox(
                       width: 5,
                     ),
@@ -63,12 +73,21 @@ class UserManagement {
                         colorWhite, isFontBold)
                   ])
                 : Column(children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        userData!['photoURL'],
-                      ),
-                      radius: avatarSize,
-                    ),
+                    CachedNetworkImage(
+                        imageUrl: userData!['photoURL'],
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                              backgroundImage: imageProvider,
+                              radius: avatarSize,
+                            ),
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => SizedBox(
+                                  height: avatarSize,
+                                  width: avatarSize,
+                                  child: CircularProgressIndicator(
+                                    value: downloadProgress.progress,
+                                    color: Colors.green,
+                                  ),
+                                )),
                     const SizedBox(
                       width: 5,
                     ),
@@ -76,31 +95,41 @@ class UserManagement {
                         colorWhite, isFontBold)
                   ]);
           } else {
-            return
-              isRow ?
-              Row(children: [
-                CircleAvatar(
-                  backgroundColor:  Colors.grey,
-                  radius: avatarSize,
-                  child: const SizedBox(width: 1, height: 1,)
-              ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Container(height: 10, width: 50, color: Colors.grey,)
-              ]) :
-              Column(children: [
-                CircleAvatar(
-                    backgroundColor:  Colors.grey,
-                    radius: avatarSize,
-                    child: const SizedBox(width: 1, height: 1,)
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Container(height: 10, width: 50, color: Colors.grey,)
-              ]);
-
+            return isRow
+                ? Row(children: [
+                    CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        radius: avatarSize,
+                        child: const SizedBox(
+                          width: 1,
+                          height: 1,
+                        )),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Container(
+                      height: 10,
+                      width: 50,
+                      color: Colors.grey,
+                    )
+                  ])
+                : Column(children: [
+                    CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        radius: avatarSize,
+                        child: const SizedBox(
+                          width: 1,
+                          height: 1,
+                        )),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Container(
+                      height: 10,
+                      width: 50,
+                      color: Colors.grey,
+                    )
+                  ]);
           }
         });
   }
@@ -117,51 +146,67 @@ class UserManagement {
             var userData = snapshot.data;
 
             return userData!['address'] == '' || userData['cellNumber'] == ''
-                ?  Column(
-              children: [
-                Text( showToSeller ? 'Email buyer to add Address' : 'Add Address and Cell Number in Profile.', style: const TextStyle(color: Colors.orange, fontSize: 14)),
-                showToSeller ? InputChip(
-                  avatar: const Icon(Icons.email),
-                  label: const Text('Mail Buyer'),
-                  onPressed: () async{
-                    String? encodeQueryParameters(Map<String, String> params) {
-                      return params.entries
-                          .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-                          .join('&');
-                    }
-                    final Uri launchUri = Uri(
-                        scheme: 'mailto',
-                        path: userData['email'],
-                      query: encodeQueryParameters(<String, String>{
-                          'subject' : 'Please update your address and cell number.',
-                        'body': 'Dear, ${userData['userName']},\n Please update your Address and Cell Phone Number from'
-                            ' your profile in HaggleBD as I can send your product as soon as possible.\n\nThanks and Regards,\n ${user!.displayName}\nSeller, HaggleBD.',
-                      })
-                    ) ;
+                ? Column(
+                    children: [
+                      Text(
+                          showToSeller
+                              ? 'Email buyer to add Address'
+                              : 'Add Address and Cell Number in Profile.',
+                          style: const TextStyle(
+                              color: Colors.orange, fontSize: 14)),
+                      showToSeller
+                          ? InputChip(
+                              avatar: const Icon(Icons.email),
+                              label: const Text('Mail Buyer'),
+                              onPressed: () async {
+                                String? encodeQueryParameters(
+                                    Map<String, String> params) {
+                                  return params.entries
+                                      .map((e) =>
+                                          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+                                      .join('&');
+                                }
 
-                    await launchUrl(launchUri);
-                  },
+                                final Uri launchUri = Uri(
+                                    scheme: 'mailto',
+                                    path: userData['email'],
+                                    query:
+                                        encodeQueryParameters(<String, String>{
+                                      'subject':
+                                          'Please update your address and cell number.',
+                                      'body': 'Dear, ${userData['userName']},\n Please update your Address and Cell Phone Number from'
+                                          ' your profile in HaggleBD as I can send your product as soon as possible.\n\nThanks and Regards,\n ${user!.displayName}\nSeller, HaggleBD.',
+                                    }));
 
-                ) : Container(),
-              ],
-            )
+                                await launchUrl(launchUri);
+                              },
+                            )
+                          : Container(),
+                    ],
+                  )
                 : Column(
-              children: [
-                Text(showToSeller ? 'Product must deliver @ ' + userData['address'] : "Product will deliver @ " + userData['address'], style: const TextStyle(color: Colors.white, fontSize: 18)),
-                showToSeller ? InputChip(
-                  avatar: const Icon(Icons.call),
-                  label: const Text('Make Contact'),
-                  onPressed: () async{
-                    final Uri launchUri = Uri(
-                        scheme: 'tel',
-                        path: '+88'+userData['cellNumber']
-                    ) ;
+                    children: [
+                      Text(
+                          showToSeller
+                              ? 'Product must deliver @ ' + userData['address']
+                              : "Product will deliver @ " + userData['address'],
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 18)),
+                      showToSeller
+                          ? InputChip(
+                              avatar: const Icon(Icons.call),
+                              label: const Text('Make Contact'),
+                              onPressed: () async {
+                                final Uri launchUri = Uri(
+                                    scheme: 'tel',
+                                    path: '+88' + userData['cellNumber']);
 
-                    await launchUrl(launchUri);
-                  },
-                ) : Container(),
-              ],
-            );
+                                await launchUrl(launchUri);
+                              },
+                            )
+                          : Container(),
+                    ],
+                  );
           } else {
             return Container();
           }

@@ -5,6 +5,7 @@ import 'package:haggle/utilities/GesturedCard.dart';
 import 'package:provider/provider.dart';
 import 'ProfilePage.dart';
 import 'package:lottie/lottie.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AuctionAds extends StatefulWidget {
   const AuctionAds({Key? key}) : super(key: key);
@@ -25,7 +26,6 @@ class _AuctionAdsState extends State<AuctionAds> {
     });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,26 +62,32 @@ class _AuctionAdsState extends State<AuctionAds> {
                 ],
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (BuildContext context) {
-                    return ProfilePage(productList: productList);
-                  }));
-                  //Navigator.of(context).pushNamed('/profilePage');
-                },
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(userImage.toString()),
-                  radius: 25,
-                ),
-              )
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                      return ProfilePage(productList: productList);
+                    }));
+                    //Navigator.of(context).pushNamed('/profilePage');
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl: userImage.toString(),
+                    imageBuilder: (context, imageProvider) => CircleAvatar(
+                      backgroundImage: imageProvider,
+                      radius: 25,
+                    ),
+                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                          CircularProgressIndicator(value: downloadProgress.progress, color: Colors.green,)
+                  ))
             ],
           ),
         ),
         body: productList.isNotEmpty
             ? GesturedCard(items: productList)
             : Center(
-                child: showCircular ? CircularProgressIndicator(
-                color: Colors.blue[500],
-              ) : const Text('No Auction Ads Found!')));
+                child: showCircular
+                    ? CircularProgressIndicator(
+                        color: Colors.blue[500],
+                      )
+                    : const Text('No Auction Ads Found!')));
   }
 }
