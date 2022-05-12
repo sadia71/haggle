@@ -58,9 +58,10 @@ class UserManagement {
                               radius: avatarSize,
                             ),
                         progressIndicatorBuilder:
-                            (context, url, downloadProgress) => SizedBox(
+                            (context, url, downloadProgress) => Container(
                                   height: avatarSize,
                                   width: avatarSize,
+                                  alignment: Alignment.center,
                                   child: CircularProgressIndicator(
                                     value: downloadProgress.progress,
                                     color: Colors.green,
@@ -80,9 +81,10 @@ class UserManagement {
                               radius: avatarSize,
                             ),
                         progressIndicatorBuilder:
-                            (context, url, downloadProgress) => SizedBox(
+                            (context, url, downloadProgress) => Container(
                                   height: avatarSize,
                                   width: avatarSize,
+                                  alignment: Alignment.center,
                                   child: CircularProgressIndicator(
                                     value: downloadProgress.progress,
                                     color: Colors.green,

@@ -70,9 +70,7 @@ class BidsManagement {
     } catch (e) {
       FlutterToast().errorToast('@error ', "BOTTOM", 14.0, e.toString());
     }
-    finally {
 
-    }
   }
 
   auctionCompleted(postId) async {
