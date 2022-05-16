@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:haggle/utilities/FlutterToast.dart';
 import 'package:haggle/utilities/pie-chart/PieChartPage.dart';
 import 'LoginPage.dart';
@@ -156,15 +157,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                 size: 20,
                                 color: Colors.white,
                               ),
-                              Text(
-                                "  " + user!.displayName!,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                                maxLines: 1,
-                                textAlign: TextAlign.left,
+                              SizedBox(width: 150, child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  "  " + user!.displayName!,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  textAlign: TextAlign.left,
+                                ),
                               ),
+                              )
                             ],
                           ),
                           userData != null && userData!['cellNumber'] != ''
@@ -192,13 +199,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                 size: 20,
                                 color: Colors.white,
                               ),
-                              Text("  " + user!.email!,
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white),
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left),
+
+                              SizedBox(width: 150, child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text("  " + user!.email!,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.white),
+                                    maxLines: 1,
+                                    textAlign: TextAlign.left),
+                              ),
+                              )
+
                             ],
                           ),
                           userData != null && userData!['address'] != ''

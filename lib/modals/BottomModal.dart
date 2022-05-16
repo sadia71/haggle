@@ -105,7 +105,7 @@ class _BottomModalState extends State<BottomModal> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text('Min bid price : ৳$lowestBidPrice'),
-                          Text('Bid to Win > ৳$userBidPrice', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),),
+                          Text('Bid to Win > ৳$lastBidPrice', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),),
                         ],
                       ),
                       TextField(
@@ -137,7 +137,7 @@ class _BottomModalState extends State<BottomModal> {
                                       }
                                     : null,
                           ),
-                          hintText: '৳$userBidPrice',
+                          hintText: 'Bid more than ৳$lastBidPrice',
                         ),
                       ),
                     ])
